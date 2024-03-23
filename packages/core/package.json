@@ -7,8 +7,12 @@
     "typecheck": "tsc -noEmit"
   },
   "devDependencies": {
-    "vitest": "^1.4.0",
     "@types/node": "^20.11.30",
-    "sst": "2.41.3"
+    "drizzle-kit": "^0.20.14",
+    "sst": "2.41.3",
+    "vitest": "^1.4.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.4"
   }
 }

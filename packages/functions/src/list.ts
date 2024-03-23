@@ -1,8 +1,13 @@
-import { events } from "@events-app-backend/core/events";
+import { listEvents } from "@events-app-backend/core/src/listEvents";
 
 export async function handler() {
+  const events = await listEvents();
+
   return {
-    statusCode: 200,
     body: JSON.stringify(events),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    statusCode: 200,
   };
 }
