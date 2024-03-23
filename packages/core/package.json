@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "test": "sst bind vitest",
-    "typecheck": "tsc -noEmit"
+    "typecheck": "tsc -noEmit",
+    "migrate": "npx tsx src/db/migrate.ts",
+    "generate-migration": "npx drizzle-kit generate:pg"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
