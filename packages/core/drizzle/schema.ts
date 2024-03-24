@@ -10,7 +10,7 @@ import {
 export const events = pgTable("events", {
   id: serial("id"),
   name: varchar("name"),
-  date: date("date"),
+  date: date("date", { mode: "date" }),
   location: varchar("location", {
     enum: [
       "paris",
