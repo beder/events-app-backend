@@ -31,6 +31,7 @@ export function DefaultStack({ stack }: StackContext) {
     },
     routes: {
       "GET /events": "packages/functions/src/list.handler",
+      "GET /events/{id}": "packages/functions/src/get.handler",
       "POST /events": "packages/functions/src/create.handler",
     },
   });
