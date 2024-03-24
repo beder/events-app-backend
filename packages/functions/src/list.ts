@@ -1,6 +1,7 @@
 import { listEvents } from "@events-app-backend/core/src/listEvents";
+import { ApiHandler } from "sst/node/api";
 
-export async function handler() {
+export const handler = ApiHandler(async () => {
   const events = await listEvents();
 
   return {
@@ -10,4 +11,4 @@ export async function handler() {
     },
     statusCode: 200,
   };
-}
+});

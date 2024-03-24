@@ -1,11 +1,13 @@
 import { ApiHandler } from "sst/node/api";
 import {
-  createEvent,
-  insertEventSchema,
-} from "@events-app-backend/core/src/createEvent";
+  updateEvent,
+  updateEventSchema,
+} from "@events-app-backend/core/src/updateEvent";
 
 export const handler = ApiHandler(async (apiEvent) => {
-  const result = insertEventSchema.safeParse(JSON.parse(apiEvent.body ?? "{}"));
+  const id = parseInt(apiEvent.pathParameters?.id ?? "");
+
+  const result = updateEventSchema.safeParse(JSON.parse(apiEvent.body ?? "{}"));
 
   if (!result.success) {
     return {
@@ -17,10 +19,10 @@ export const handler = ApiHandler(async (apiEvent) => {
     };
   }
 
-  const newEvent = await createEvent(result.data);
+  const updatedEvent = await updateEvent(id, result.data);
 
   return {
-    body: JSON.stringify(newEvent),
+    body: JSON.stringify(updatedEvent),
     headers: {
       "Content-Type": "application/json",
     },
