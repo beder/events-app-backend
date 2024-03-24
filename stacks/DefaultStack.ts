@@ -34,6 +34,7 @@ export function DefaultStack({ stack }: StackContext) {
       "GET /events/{id}": "packages/functions/src/get.handler",
       "PUT /events/{id}": "packages/functions/src/update.handler",
       "POST /events": "packages/functions/src/create.handler",
+      "DELETE /events/{id}": "packages/functions/src/delete.handler",
     },
   });
 
