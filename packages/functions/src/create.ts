@@ -1,17 +1,23 @@
 import { ApiHandler } from "sst/node/api";
-import { createEvent } from "@events-app-backend/core/src/createEvent";
+import {
+  createEvent,
+  insertEventSchema,
+} from "@events-app-backend/core/src/createEvent";
 
 export const handler = ApiHandler(async (event) => {
-  const { name, description } = JSON.parse(event.body ?? "{}");
+  const result = insertEventSchema.safeParse(JSON.parse(event.body ?? "{}"));
 
-  if (!name) {
+  if (!result.success) {
     return {
       statusCode: 400,
-      body: "Missing event name",
+      body: JSON.stringify(result.error.issues),
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
   }
 
-  const newEvent = await createEvent({ name, description });
+  const newEvent = await createEvent(result.data);
 
   return {
     body: JSON.stringify(newEvent),

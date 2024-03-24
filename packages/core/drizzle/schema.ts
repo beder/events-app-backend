@@ -1,7 +1,27 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  date,
+  varchar,
+  integer,
+} from "drizzle-orm/pg-core";
 
 export const events = pgTable("events", {
   id: serial("id"),
-  name: text("name"),
+  name: varchar("name"),
+  date: date("date"),
+  location: varchar("location", {
+    enum: [
+      "paris",
+      "new-york",
+      "london",
+      "tokyo",
+      "berlin",
+      "beijing",
+      "online",
+    ],
+  }),
   description: text("description"),
+  price: integer("price"),
 });
