@@ -2,6 +2,7 @@ import middy from "@middy/core";
 import { AsyncLocalStorage } from "async_hooks";
 import { APIGatewayProxyEventV2WithJWTAuthorizer } from "aws-lambda";
 import { getUserEvent } from "./getUserEvent";
+import { json } from "./json";
 
 export const userStorage = new AsyncLocalStorage();
 
@@ -30,38 +31,29 @@ export const withOwnershipCheck = () => {
       const id = parseInt(handler.event.pathParameters?.id ?? "");
 
       if (id === undefined) {
-        return {
+        return json({
           statusCode: 400,
-          body: JSON.stringify({ message: "Missing id" }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+          body: { message: "Missing id" },
+        });
       }
 
       const userId = useUser();
 
       if (userId === undefined) {
-        return {
+        return json({
           statusCode: 401,
-          body: JSON.stringify({ message: "Unauthorized" }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+          body: { message: "Unauthorized" },
+        });
       }
 
       // Check if the user owns the event
       const event = getUserEvent(id, userId);
 
       if (!Boolean(event)) {
-        return {
+        return json({
           statusCode: 403,
-          body: JSON.stringify({ message: "Forbidden" }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+          body: { message: "Forbidden" },
+        });
       }
     },
   };

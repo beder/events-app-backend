@@ -1,36 +1,28 @@
 import { ApiHandler } from "sst/node/api";
 import { getEvent } from "@events-app-backend/core/src/getEvent";
+import { json } from "@events-app-backend/core/json";
 
 export const handler = ApiHandler(async (apiEvent) => {
   const id = parseInt(apiEvent.pathParameters?.id ?? "");
 
   if (isNaN(id)) {
-    return {
+    return json({
+      body: { error: "Event not found" },
       statusCode: 404,
-      body: JSON.stringify({ error: "Event not found" }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    });
   }
 
   const event = await getEvent(id);
 
   if (!event) {
-    return {
+    return json({
+      body: { error: "Event not found" },
       statusCode: 404,
-      body: JSON.stringify({ error: "Event not found" }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    });
   }
 
-  return {
-    body: JSON.stringify(event),
-    headers: {
-      "Content-Type": "application/json",
-    },
+  return json({
+    body: event,
     statusCode: 200,
-  };
+  });
 });
