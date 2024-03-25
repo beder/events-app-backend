@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "@middy/core": "^5.3.2",
     "test": "sst bind vitest",
     "typecheck": "tsc -noEmit"
   },

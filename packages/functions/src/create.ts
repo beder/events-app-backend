@@ -3,27 +3,36 @@ import {
   createEvent,
   insertEventSchema,
 } from "@events-app-backend/core/src/createEvent";
+import {
+  useUser,
+  withUserStoredInContext,
+} from "@events-app-backend/core/src/middleware";
+import { json } from "@events-app-backend/core/src/json";
+import middy from "@middy/core";
 
-export const handler = ApiHandler(async (apiEvent) => {
-  const result = insertEventSchema.safeParse(JSON.parse(apiEvent.body ?? "{}"));
+export const handler = middy()
+  .use(withUserStoredInContext())
+  .handler(
+    ApiHandler(async (apiEvent) => {
+      const userId = useUser();
 
-  if (!result.success) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify(result.error.issues),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  }
+      const result = insertEventSchema.safeParse({
+        ...JSON.parse(apiEvent.body ?? "{}"),
+        userId,
+      });
 
-  const newEvent = await createEvent(result.data);
+      if (!result.success) {
+        return json({
+          statusCode: 400,
+          body: result.error.issues,
+        });
+      }
 
-  return {
-    body: JSON.stringify(newEvent),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    statusCode: 200,
-  };
-});
+      const newEvent = await createEvent(result.data);
+
+      return json({
+        body: newEvent,
+        statusCode: 200,
+      });
+    })
+  );

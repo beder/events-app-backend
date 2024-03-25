@@ -1,0 +1,1 @@
+ALTER TABLE "events" ADD COLUMN "user_id" varchar;

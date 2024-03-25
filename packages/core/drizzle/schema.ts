@@ -24,4 +24,5 @@ export const events = pgTable("events", {
   }),
   description: text("description"),
   price: integer("price"),
+  userId: varchar("user_id"),
 });

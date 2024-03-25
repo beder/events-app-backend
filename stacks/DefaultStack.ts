@@ -24,6 +24,18 @@ export function DefaultStack({ stack }: StackContext) {
   });
 
   const api = new Api(stack, "Api", {
+    authorizers: {
+      JwtAuthorizer: {
+        type: "jwt",
+        identitySource: ["$request.header.authorization"],
+        jwt: {
+          audience: ["test"],
+          issuer:
+            process.env.JWT_AUTHORIZER_ISSUER ??
+            "https://example.clerk.accounts.dev",
+        },
+      },
+    },
     defaults: {
       function: {
         bind: [rds],
@@ -32,9 +44,18 @@ export function DefaultStack({ stack }: StackContext) {
     routes: {
       "GET /events": "packages/functions/src/list.handler",
       "GET /events/{id}": "packages/functions/src/get.handler",
-      "PUT /events/{id}": "packages/functions/src/update.handler",
-      "POST /events": "packages/functions/src/create.handler",
-      "DELETE /events/{id}": "packages/functions/src/delete.handler",
+      "PUT /events/{id}": {
+        authorizer: "JwtAuthorizer",
+        function: "packages/functions/src/update.handler",
+      },
+      "POST /events": {
+        authorizer: "JwtAuthorizer",
+        function: "packages/functions/src/create.handler",
+      },
+      "DELETE /events/{id}": {
+        authorizer: "JwtAuthorizer",
+        function: "packages/functions/src/delete.handler",
+      },
     },
   });
 
