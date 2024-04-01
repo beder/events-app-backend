@@ -8,7 +8,7 @@ import {
   withOwnershipCheck,
   withUserStoredInContext,
 } from "@events-app-backend/core/src/middleware";
-import { json } from "@events-app-backend/core/json";
+import { json } from "@events-app-backend/core/src/utils/json";
 
 export const handler = middy()
   .use([withUserStoredInContext(), withOwnershipCheck()])

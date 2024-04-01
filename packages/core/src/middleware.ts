@@ -1,10 +1,10 @@
 import middy from "@middy/core";
 import { AsyncLocalStorage } from "async_hooks";
 import { APIGatewayProxyEventV2WithJWTAuthorizer } from "aws-lambda";
-import { json } from "./json";
 import { getEvent } from "./getEvent";
+import { forbidden } from "./utils/forbidden";
 
-export const userStorage = new AsyncLocalStorage();
+const userStorage = new AsyncLocalStorage();
 
 export const useUser = () => {
   return userStorage.getStore() as string | undefined;
@@ -48,10 +48,3 @@ export const withOwnershipCheck = () => {
     },
   };
 };
-
-const forbidden = () => {
-  return json({
-    statusCode: 403,
-    body: { message: "Forbidden" },
-  });
-}

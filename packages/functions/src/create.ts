@@ -7,7 +7,7 @@ import {
   useUser,
   withUserStoredInContext,
 } from "@events-app-backend/core/src/middleware";
-import { json } from "@events-app-backend/core/src/json";
+import { json } from "@events-app-backend/core/src/utils/json";
 import middy from "@middy/core";
 
 export const handler = middy()

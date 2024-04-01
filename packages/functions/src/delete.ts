@@ -1,6 +1,6 @@
 import { ApiHandler } from "sst/node/api";
 import { deleteEvent } from "@events-app-backend/core/src/deleteEvent";
-import { json } from "@events-app-backend/core/json";
+import { json } from "@events-app-backend/core/src/utils/json";
 import middy from "@middy/core";
 import {
   withOwnershipCheck,

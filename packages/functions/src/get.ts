@@ -1,6 +1,6 @@
 import { ApiHandler } from "sst/node/api";
 import { getEvent } from "@events-app-backend/core/src/getEvent";
-import { json } from "@events-app-backend/core/json";
+import { json } from "@events-app-backend/core/src/utils/json";
 
 export const handler = ApiHandler(async (apiEvent) => {
   const id = parseInt(apiEvent.pathParameters?.id ?? "");
