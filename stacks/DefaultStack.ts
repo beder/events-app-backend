@@ -1,6 +1,8 @@
-import { Api, RDS, Script, StackContext } from "sst/constructs";
+import { Api, Bucket, RDS, Script, StackContext } from "sst/constructs";
 
 export function DefaultStack({ stack }: StackContext) {
+  const bucket = new Bucket(stack, "Bucket");
+
   const rds = new RDS(stack, "DB", {
     engine: "postgresql13.9",
     defaultDatabaseName: "eventsapp",
@@ -38,23 +40,27 @@ export function DefaultStack({ stack }: StackContext) {
     },
     defaults: {
       function: {
-        bind: [rds],
+        bind: [bucket, rds],
       },
     },
     routes: {
-      "GET /events": "packages/functions/src/list.handler",
-      "GET /events/{id}": "packages/functions/src/get.handler",
+      "GET /events": "packages/functions/src/events/list.handler",
+      "GET /events/{id}": "packages/functions/src/events/get.handler",
       "PUT /events/{id}": {
         authorizer: "JwtAuthorizer",
-        function: "packages/functions/src/update.handler",
+        function: "packages/functions/src/events/update.handler",
       },
       "POST /events": {
         authorizer: "JwtAuthorizer",
-        function: "packages/functions/src/create.handler",
+        function: "packages/functions/src/events/create.handler",
       },
       "DELETE /events/{id}": {
         authorizer: "JwtAuthorizer",
-        function: "packages/functions/src/delete.handler",
+        function: "packages/functions/src/events/delete.handler",
+      },
+      "POST /presigned-urls": {
+        authorizer: "JwtAuthorizer",
+        function: "packages/functions/src/presigned-urls/create.handler",
       },
     },
   });
