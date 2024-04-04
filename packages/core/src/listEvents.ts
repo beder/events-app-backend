@@ -1,6 +1,6 @@
 import { db } from "../drizzle/db";
 import { events } from "../drizzle/schema";
-import { like, or } from "drizzle-orm";
+import { ilike, or } from "drizzle-orm";
 
 export const listEvents = async (q?: string) => {
   const query = db.select().from(events);
@@ -10,6 +10,6 @@ export const listEvents = async (q?: string) => {
   }
 
   return query.where(
-    or(like(events.name, `%${q}%`), like(events.description, `%${q}%`))
+    or(ilike(events.name, `%${q}%`), ilike(events.description, `%${q}%`))
   );
 };
